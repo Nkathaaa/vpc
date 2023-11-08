@@ -9,10 +9,10 @@
         region: us-east-1
         state: absent
       register: aws_vpc_info
+     
 
     - name: create subnet  1
       amazon.aws.ec2_vpc_subnet:
-        #state: present
         state: absent
         vpc_id: "{{ aws_vpc_info.vpc.id}}"
         region: us-east-1
@@ -23,7 +23,6 @@
 
     - name: create subnet 2 
       amazon.aws.ec2_vpc_subnet:
-        #state: present
         state: absent
         vpc_id: "{{ aws_vpc_info.vpc.id}}"
         region: us-east-1
@@ -46,23 +45,14 @@
           - "{{ public_subnet_info.subnet.id}}"
           - "{{ private_subnet_info.subnet.id}}"
         vpc_id: "{{ aws_vpc_info.vpc.id }}"
-        state: absent
       register: vpc_route_table
 
-    - name:  create a new nat gateway private
-      amazon.aws.ec2_vpc_nat_gateway:
-       #
-        subnet_id: "{{ private_subnet_info.subnet.id}}"
-        wait: true
-        region: us-east-1
-        state: absent
-      register: new_nat_gateway_private  
+
     
 
     - name:  create security groups
       amazon.aws.ec2_security_group:
         name: first-vpc-security-group
-        state: absent
         description: vpc security group
         vpc_id: "{{ aws_vpc_info.vpc.id }}"
         rules:
@@ -79,6 +69,12 @@
             to_port: 443  
             cidr_ip: 0.0.0.0/0
     
-          
+    - name:  create a new nat gateway private
+      amazon.aws.ec2_vpc_nat_gateway:
+        state:  absent
+        subnet_id: "{{ private_subnet_info.subnet.id}}"
+        wait: true
+        region: us-east-1
+      register: new_nat_gateway_private         
 
 

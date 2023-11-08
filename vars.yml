@@ -1,0 +1,10 @@
+---
+vars:
+  vpc_name: "{{ prefix }}vpc"
+  region: us-east-1
+  az0: "us-east-1a"
+  az1: "us-east-2a"
+  prefix: "stagingNKathad"
+  igw_name: "multi-az-vpc"
+  route_table_name: "{{ prefix }}Route Table"
+  security_group_name: "{{ prefix}}Security Group"
